@@ -1,0 +1,37 @@
+enable
+configure terminal
+hostname RT-01
+banner motd "APENAS PESSOAS AUTORIZADAS"
+enable secret SenhadaEnable
+interface gigabitEthernet 0/0
+ip address 192.168.1.1 255.255.255.254
+description REDE-1
+no shutdown
+exit
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+password SenhadaVTY
+transport input ssh
+exec-timeout 3
+login local
+exit
+username administrador privilege 15 secret SenhaAdmin
+username estagiario privilege 1 secret SenhaEst
+login block-for 240 attempts 3 within 60
+security passwords min-length 8 
+service password-encryption
+do wr
+
+ip route 200.200.100.8 255.255.255.252 200.200.100.6
+ip route 200.200.100.8 255.255.255.252 200.200.100.2
+ip route 200.200.100.12 255.255.255.252 200.200.100.2
+ip route 200.200.100.12 255.255.255.252 200.200.100.6
+ip route 10.40.16.0 255.255.240.0 200.200.100.2
+ip route 10.40.16.0 255.255.240.0 200.200.100.6
+ip route 192.168.0.0 255.255.255.128 200.200.100.6
+ip route 192.168.0.0 255.255.255.128 200.200.100.2
+ip route 172.16.42.0 255.255.254.0 200.200.100.6
+ip route 172.16.42.0 255.255.254.0 200.200.100.2
